@@ -1,0 +1,321 @@
+Note,Category
+biryani,Food
+pizza,Food
+burger,Food
+lunch,Food
+dinner,Food
+breakfast,Food
+snacks,Food
+shawarma,Food
+parotta,Food
+fried rice,Food
+coffee,Food
+tea,Food
+ice cream,Food
+juice,Food
+restaurant bill,Food
+food delivery,Food
+swiggy order,Food
+zomato order,Food
+street food,Food
+bakery items,Food
+cake,Food
+noodles,Food
+sandwich,Food
+chai and samosa,Food
+buffet dinner,Food
+fruits,Food
+grocery snacks,Food
+milkshake,Food
+donuts,Food
+chocolate,Food
+canteen food,Food
+mess bill,Food
+food court,Food
+chinese food,Food
+south indian meal,Food
+north indian thali,Food
+momos,Food
+rolls,Food
+chaat,Food
+cold drink,Food
+metro ticket,Transport
+bus ticket,Transport
+auto fare,Transport
+cab ride,Transport
+uber ride,Transport
+ola ride,Transport
+petrol,Transport
+diesel,Transport
+fuel refill,Transport
+train ticket,Transport
+flight ticket,Transport
+parking fee,Transport
+toll fee,Transport
+bike service,Transport
+car service,Transport
+vehicle repair,Transport
+rickshaw fare,Transport
+railway pass,Transport
+monthly bus pass,Transport
+app cab booking,Transport
+airport taxi,Transport
+fuel top up,Transport
+bike rental,Transport
+car rental,Transport
+ferry ticket,Transport
+shared cab,Transport
+highway toll,Transport
+vehicle insurance,Transport
+helmet purchase,Transport
+bike wash,Transport
+car wash,Transport
+public transport card recharge,Transport
+rapido ride,Transport
+shuttle service,Transport
+tempo travel,Transport
+scooter rental,Transport
+cycle repair,Transport
+commute fare,Transport
+travel booking fee,Transport
+cab surge fare,Transport
+rent,Bills
+electricity bill,Bills
+water bill,Bills
+gas cylinder,Bills
+wifi bill,Bills
+internet recharge,Bills
+mobile bill,Bills
+society maintenance,Bills
+house maintenance,Bills
+broadband bill,Bills
+dth recharge,Bills
+phone bill payment,Bills
+electricity recharge,Bills
+water tanker payment,Bills
+maintenance charges,Bills
+landlord payment,Bills
+utility bill,Bills
+gas bill,Bills
+cable tv bill,Bills
+postpaid bill,Bills
+prepaid recharge,Bills
+housing society fee,Bills
+property tax,Bills
+home loan emi,Bills
+apartment rent,Bills
+flat rent,Bills
+broadband recharge,Bills
+electric meter recharge,Bills
+piped gas bill,Bills
+garbage collection fee,Bills
+security deposit,Bills
+maintenance fee,Bills
+monthly rent payment,Bills
+cooking gas booking,Bills
+sewage bill,Bills
+municipal tax,Bills
+house rent advance,Bills
+utility recharge,Bills
+rent payment,Bills
+common area maintenance,Bills
+movie,Entertainment
+movie ticket,Entertainment
+concert ticket,Entertainment
+party,Entertainment
+club entry,Entertainment
+outing,Entertainment
+picnic,Entertainment
+bowling,Entertainment
+gaming zone,Entertainment
+amusement park,Entertainment
+night out,Entertainment
+bar bill,Entertainment
+pub visit,Entertainment
+get together,Entertainment
+festival celebration,Entertainment
+trip with friends,Entertainment
+karaoke night,Entertainment
+sports match ticket,Entertainment
+arcade games,Entertainment
+friends hangout,Entertainment
+cricket match tickets,Entertainment
+theatre play,Entertainment
+stand up comedy show,Entertainment
+reunion dinner,Entertainment
+farewell party,Entertainment
+new year party,Entertainment
+diwali celebration,Entertainment
+team outing,Entertainment
+friends trip,Entertainment
+cafe hangout,Entertainment
+clubbing,Entertainment
+date night,Entertainment
+celebration dinner,Entertainment
+netflix subscription,Entertainment
+spotify subscription,Entertainment
+video game purchase,Entertainment
+streaming subscription,Entertainment
+amusement ride tickets,Entertainment
+music concert,Entertainment
+live show tickets,Entertainment
+shoes,Shopping
+hoodie,Shopping
+t-shirt,Shopping
+jeans,Shopping
+jacket,Shopping
+shirt,Shopping
+trousers,Shopping
+sneakers,Shopping
+sandals,Shopping
+kurta,Shopping
+dress,Shopping
+skirt,Shopping
+formal shirt,Shopping
+winter jacket,Shopping
+socks,Shopping
+belt,Shopping
+cap,Shopping
+sunglasses,Shopping
+watch,Shopping
+handbag,Shopping
+wallet purchase,Shopping
+innerwear,Shopping
+sweater,Shopping
+blazer,Shopping
+saree,Shopping
+ethnic wear,Shopping
+sports shoes,Shopping
+slippers,Shopping
+scarf,Shopping
+gloves,Shopping
+online shopping order,Shopping
+amazon order,Shopping
+flipkart order,Shopping
+electronics purchase,Shopping
+gadget purchase,Shopping
+home decor shopping,Shopping
+gift purchase,Shopping
+accessories purchase,Shopping
+mall shopping,Shopping
+new phone case,Shopping
+doctor consultation,Health
+pharmacy bill,Health
+medicine purchase,Health
+hospital visit,Health
+dental checkup,Health
+eye checkup,Health
+health checkup,Health
+gym membership,Health
+yoga classes,Health
+protein supplement,Health
+medical test,Health
+blood test,Health
+vaccination,Health
+physiotherapy session,Health
+health insurance premium,Health
+vitamins purchase,Health
+first aid supplies,Health
+clinic fee,Health
+surgery cost,Health
+lab test fee,Health
+diagnostic center bill,Health
+orthopedic consultation,Health
+skin specialist visit,Health
+dietitian consultation,Health
+fitness tracker purchase,Health
+medical checkup package,Health
+eye glasses purchase,Health
+contact lens purchase,Health
+ambulance charges,Health
+prescription refill,Health
+therapy session,Health
+mental health consultation,Health
+covid test,Health
+x-ray charges,Health
+medical equipment purchase,Health
+pain relief medicine,Health
+cold and flu medicine,Health
+dental filling,Health
+root canal treatment,Health
+health supplement subscription,Health
+college fees,Education
+tuition fees,Education
+school fees,Education
+books purchase,Education
+online course,Education
+coaching class fee,Education
+exam fee,Education
+study material,Education
+stationery items,Education
+laptop for studies,Education
+library fine,Education
+certification course,Education
+workshop fee,Education
+seminar registration,Education
+textbook purchase,Education
+notebook purchase,Education
+printing charges,Education
+photocopy for assignment,Education
+udemy course,Education
+coursera subscription,Education
+skill development course,Education
+language class fee,Education
+tutoring fee,Education
+entrance exam fee,Education
+application fee,Education
+hostel fee,Education
+project material cost,Education
+lab fee,Education
+student id card fee,Education
+graduation fee,Education
+convocation fee,Education
+e-learning subscription,Education
+competitive exam coaching,Education
+spoken english class,Education
+computer course fee,Education
+music lessons,Education
+dance class fee,Education
+art class fee,Education
+school uniform,Education
+educational software license,Education
+mobile recharge,Other
+document fee,Other
+service payment,Other
+repair payment,Other
+miscellaneous payment,Other
+other payment,Other
+personal expense,Other
+unexpected expense,Other
+small expense,Other
+general payment,Other
+miscellaneous spending,Other
+bank charges,Other
+atm withdrawal fee,Other
+late fee,Other
+fine payment,Other
+donation,Other
+subscription renewal,Other
+software subscription,Other
+app purchase,Other
+courier charges,Other
+postage fee,Other
+sim card purchase,Other
+lended money,Other
+borrowed money returned,Other
+miscellaneous item,Other
+service tax,Other
+convenience fee,Other
+processing fee,Other
+loan repayment,Other
+credit card payment,Other
+membership fee,Other
+annual maintenance charge,Other
+unclassified expense,Other
+cash withdrawal,Other
+miscellaneous purchase,Other
+gift for someone,Other
+charity donation,Other
+pet expense,Other
+salon and grooming,Other
+misc,Other

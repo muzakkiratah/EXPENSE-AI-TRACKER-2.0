@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Search - ExpenseAI{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h1>Search Results</h1>
+  <p>{% if query %}Showing results for "{{ query }}"{% else %}Enter a search term{% endif %}</p>
+</div>
+
+<div class="card">
+  {% if results %}
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Description</th>
+          <th>Category</th>
+          <th>Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for exp in results %}
+          <tr>
+            <td data-label="Date">{{ exp.date.strftime("%d %b %Y") }}</td>
+            <td data-label="Description">{{ exp.description }}</td>
+            <td data-label="Category"><span class="badge badge-{{ exp.category|lower|replace(' ', '-') }}">{{ exp.category }}</span></td>
+            <td data-label="Amount">₹{{ "%.2f"|format(exp.amount) }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% elif query %}
+    <div class="empty-state">
+      <p>No results found</p>
+      <p class="empty-state-sub">Try a different search term.</p>
+    </div>
+  {% else %}
+    <div class="empty-state">
+      <p>Search your expenses</p>
+      <p class="empty-state-sub">Use the search bar in the sidebar to get started.</p>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

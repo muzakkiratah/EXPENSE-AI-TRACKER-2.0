@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}ExpenseAI{% endblock %}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+{% if session.get('user_id') %}
+<div class="app-shell">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-name">ExpenseAI</div>
+      <div class="brand-sub">Smart Finance</div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="{{ url_for('dashboard') }}" class="nav-link {% if request.endpoint == 'dashboard' %}active{% endif %}"><span class="nav-icon">🏠</span> Dashboard</a>
+      <a href="{{ url_for('add_expense') }}" class="nav-link {% if request.endpoint == 'add_expense' %}active{% endif %}"><span class="nav-icon">➕</span> Add Expense</a>
+      <a href="{{ url_for('import_expenses') }}" class="nav-link {% if request.endpoint == 'import_expenses' %}active{% endif %}"><span class="nav-icon">📥</span> Import Data</a>
+      <a href="{{ url_for('expenses') }}" class="nav-link {% if request.endpoint == 'expenses' %}active{% endif %}"><span class="nav-icon">💳</span> Transactions</a>
+      <a href="{{ url_for('analytics') }}" class="nav-link {% if request.endpoint == 'analytics' %}active{% endif %}"><span class="nav-icon">📊</span> Analytics</a>
+      <button type="button" class="nav-link nav-link-btn" id="openSearchBtn"><span class="nav-icon">🔍</span> Search</button>
+
+      <div class="nav-section-label">ACCOUNT</div>
+      <a href="{{ url_for('profile') }}" class="nav-link {% if request.endpoint == 'profile' %}active{% endif %}"><span class="nav-icon">👤</span> Profile</a>
+      <a href="{{ url_for('logout') }}" class="nav-link"><span class="nav-icon">🚪</span> Logout</a>
+    </nav>
+
+    <div class="sidebar-tip-card">
+      <div class="sidebar-tip-icon">✨</div>
+      <div class="sidebar-tip-title">AI Powered</div>
+      <div class="sidebar-tip-text">Smart categorization, anomaly detection &amp; spending forecasts help you spend smarter.</div>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <div class="main-area">
+    <header class="topbar">
+      <button type="button" class="mobile-menu-btn" id="mobileMenuBtn">&#9776;</button>
+      <div class="topbar-user">Hi, {{ session.get('user_name') }}</div>
+    </header>
+
+    <main class="content">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div class="flash-container">
+            {% for category, message in messages %}
+              <div class="flash flash-{{ category }}">{{ message }}</div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+
+  <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+  <!-- SEARCH POPUP -->
+  <div class="search-overlay" id="searchOverlay">
+    <div class="search-popup">
+      <div class="search-popup-header">
+        <div>
+          <div class="search-popup-title">Search Expenses</div>
+          <div class="search-popup-subtitle">Find transactions quickly</div>
+        </div>
+        <button type="button" class="search-close-btn" id="closeSearchBtn">&times;</button>
+      </div>
+
+      <form action="{{ url_for('search') }}" method="get" class="search-form">
+        <input type="text" name="query" id="searchInput" placeholder="Search expenses..." autocomplete="off">
+        <button type="submit">Search</button>
+      </form>
+
+      <div class="quick-search-label">QUICK SEARCH</div>
+      <div class="quick-search-buttons">
+        <button type="button" class="quick-search-btn" data-value="Food">🍔 Food</button>
+        <button type="button" class="quick-search-btn" data-value="Transport">🚌 Transport</button>
+        <button type="button" class="quick-search-btn" data-value="Bills">🧾 Bills</button>
+        <button type="button" class="quick-search-btn" data-value="Entertainment">🎬 Entertainment</button>
+        <button type="button" class="quick-search-btn" data-value="Shopping">🛍️ Shopping</button>
+        <button type="button" class="quick-search-btn" data-value="Health">⚕️ Health</button>
+        <button type="button" class="quick-search-btn" data-value="Education">🎓 Education</button>
+      </div>
+
+      <div class="search-popup-footer">Press ESC to close</div>
+    </div>
+  </div>
+
+</div>
+{% else %}
+  <main class="auth-content">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-container">
+          {% for category, message in messages %}
+            <div class="flash flash-{{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+    {% block auth_content %}{% endblock %}
+  </main>
+{% endif %}
+
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

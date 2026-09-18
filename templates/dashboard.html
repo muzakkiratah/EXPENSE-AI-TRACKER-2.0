@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - ExpenseAI{% endblock %}
+
+{% set category_icons = {
+  "Food": "🍔", "Transport": "🚌", "Bills": "🧾", "Entertainment": "🎬",
+  "Shopping": "🛍️", "Health": "⚕️", "Education": "🎓", "Other": "📦"
+} %}
+
+{% block content %}
+<div class="page-header">
+  <h1>Welcome back, {{ user.name }} 👋</h1>
+  <p>Manage your finances intelligently</p>
+</div>
+
+<div class="stat-grid">
+  <div class="stat-card accent-blue">
+    <div class="stat-icon">💰</div>
+    <div class="stat-label">Monthly Expenses</div>
+    <div class="stat-value">₹{{ "%.2f"|format(summary.total) }}</div>
+  </div>
+  <div class="stat-card accent-navy">
+    <div class="stat-icon">🎯</div>
+    <div class="stat-label">Monthly Budget</div>
+    <div class="stat-value">₹{{ "%.2f"|format(summary.budget) }}</div>
+  </div>
+  <div class="stat-card accent-medium">
+    <div class="stat-icon">💵</div>
+    <div class="stat-label">Remaining</div>
+    <div class="stat-value {% if summary.remaining < 0 %}negative{% endif %}">₹{{ "%.2f"|format(summary.remaining) }}</div>
+  </div>
+  <div class="stat-card accent-soft">
+    <div class="stat-icon">🧾</div>
+    <div class="stat-label">Transactions</div>
+    <div class="stat-value">{{ summary.count }}</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <h2>Budget Progress</h2>
+  </div>
+  <div class="progress-info">
+    ₹{{ "%.2f"|format(summary.total) }} / ₹{{ "%.2f"|format(summary.budget) }}
+    <span class="progress-percent">{{ summary.percent_used }}%</span>
+  </div>
+  <div class="progress-bar-track">
+    <div class="progress-bar-fill {% if summary.exceeded %}danger{% elif summary.approaching_threshold %}warning{% endif %}"
+         style="width: {{ summary.percent_used }}%;"></div>
+  </div>
+  {% if summary.exceeded %}
+    <div class="alert alert-danger">⚠ Budget Exceeded</div>
+  {% elif summary.approaching_threshold %}
+    <div class="alert alert-warning">⚠ You are approaching your monthly budget.</div>
+  {% endif %}
+</div>
+
+{% if insights %}
+<div class="card">
+  <div class="card-header">
+    <h2>Smart Insights</h2>
+  </div>
+  <ul class="insights-list">
+    {% for insight in insights %}
+      <li class="insight-item insight-{{ insight.type }}">{{ insight.text }}</li>
+    {% endfor %}
+  </ul>
+</div>
+{% endif %}
+
+<div class="card">
+  <div class="card-header">
+    <h2>Spending Forecast</h2>
+  </div>
+  {% if forecast and forecast.available %}
+    <div class="forecast-value">₹{{ "%.2f"|format(forecast.predicted) }}</div>
+    <div class="forecast-sub">Projected total spending this month</div>
+    <div class="forecast-methods">Based on: {{ forecast.methods|join(" + ") }}</div>
+  {% else %}
+    <div class="empty-state">
+      <p>{{ forecast.reason if forecast else "Not enough historical data for a reliable prediction." }}</p>
+      <p class="empty-state-sub">Keep adding expenses to unlock spending predictions.</p>
+    </div>
+  {% endif %}
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <h2>Recent Transactions</h2>
+    <a href="{{ url_for('expenses') }}" class="btn-secondary">View All Transactions</a>
+  </div>
+
+  {% if recent_expenses %}
+    <div class="transaction-list">
+      {% for exp in recent_expenses %}
+        <div class="transaction-row">
+          <div class="transaction-icon">{{ category_icons.get(exp.category, "💰") }}</div>
+          <div class="transaction-desc">
+            {{ exp.description }}
+            {% if exp.is_anomaly %}
+              <span class="anomaly-tag" title="{{ exp.anomaly_reason }}">🚨 Unusual</span>
+            {% endif %}
+          </div>
+          <div class="badge badge-{{ exp.category|lower|replace(' ', '-') }}">{{ exp.category }}</div>
+          <div class="transaction-amount">₹{{ "%.2f"|format(exp.amount) }}</div>
+          <div class="transaction-date">{{ exp.date.strftime("%d %b %Y") }}</div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="empty-state">
+      <p>No expenses yet</p>
+      <p class="empty-state-sub">Add your first expense, or import your existing spending history to get insights straight away.</p>
+      <div class="empty-state-actions">
+        <a href="{{ url_for('add_expense') }}" class="btn-primary">+ Add Expense</a>
+        <a href="{{ url_for('import_expenses') }}" class="btn-secondary">📥 Import Transactions</a>
+      </div>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Login - ExpenseAI{% endblock %}
+
+{% block auth_content %}
+<div class="auth-wrapper">
+  <div class="auth-card">
+    <div class="auth-brand">
+      <div class="brand-name dark">ExpenseAI</div>
+      <div class="brand-sub-dark">Smart Finance</div>
+    </div>
+
+    <h1 class="auth-title">Welcome back</h1>
+    <p class="auth-subtitle">Log in to manage your finances intelligently</p>
+
+    <form method="POST" action="{{ url_for('login') }}" class="auth-form">
+      <label for="email">Email Address</label>
+      <input type="email" id="email" name="email" required placeholder="you@example.com">
+
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" required placeholder="Enter your password">
+
+      <button type="submit" class="btn-primary btn-block">Login</button>
+    </form>
+
+    <p class="auth-footer-text">
+      Don't have an account? <a href="{{ url_for('register') }}">Register</a>
+    </p>
+  </div>
+</div>
+{% endblock %}

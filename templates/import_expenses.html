@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Import Transactions - ExpenseAI{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h1>Import Transactions</h1>
+  <p>Bring in your existing spending history — the AI will categorize it for you</p>
+</div>
+
+<div class="card">
+  <div class="card-header"><h2>How it works</h2></div>
+  <ol class="import-steps">
+    <li>Upload a CSV file <em>or</em> paste your transactions below.</li>
+    <li>Any row without a category is classified automatically by the AI model.</li>
+    <li>Unusual expenses are flagged, and your dashboard insights update immediately.</li>
+  </ol>
+
+  <div class="format-box">
+    <div class="format-label">Expected format (a header row is optional)</div>
+<pre class="format-sample">date, description, amount, category
+2026-09-01, Lunch at cafe, 250, Food
+2026-09-02, Metro card recharge, 80
+2026-09-03, Electricity bill, 1200</pre>
+    <p class="format-note">
+      The <strong>category</strong> column is optional — leave it out and the AI
+      will predict it. Common bank-export column names (note, narration,
+      particulars, debit, etc.) are recognized automatically.
+    </p>
+  </div>
+</div>
+
+<div class="card card-form">
+  <form method="POST" action="{{ url_for('import_expenses') }}" enctype="multipart/form-data">
+
+    <label for="csv_file">Option 1 — Upload a CSV file</label>
+    <input type="file" id="csv_file" name="csv_file" accept=".csv,.txt,text/csv">
+
+    <div class="import-divider"><span>or</span></div>
+
+    <label for="pasted_text">Option 2 — Paste your transactions</label>
+    <textarea id="pasted_text" name="pasted_text" rows="9"
+      placeholder="2026-09-01, Lunch at cafe, 250, Food&#10;2026-09-02, Metro card recharge, 80&#10;2026-09-03, Electricity bill, 1200"></textarea>
+
+    <button type="submit" class="btn-primary btn-block">Import Transactions</button>
+  </form>
+</div>
+
+<div class="card">
+  <div class="card-header"><h2>Supported categories</h2></div>
+  <div class="category-chip-row">
+    {% for cat in categories %}
+      <span class="badge badge-{{ cat|lower|replace(' ', '-') }}">{{ cat }}</span>
+    {% endfor %}
+  </div>
+  <p class="format-note">
+    Anything that doesn't match one of these is sent to the AI classifier
+    instead of being stored incorrectly.
+  </p>
+</div>
+{% endblock %}

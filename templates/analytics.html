@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% block title %}Analytics - ExpenseAI{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h1>Analytics</h1>
+  <p>Understand your spending patterns</p>
+</div>
+
+{% if has_data %}
+<div class="stat-grid stat-grid-2">
+  <div class="stat-card">
+    <div class="stat-label">Total Expenses</div>
+    <div class="stat-value">₹{{ "%.2f"|format(total_spent) }}</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Highest Spending Category</div>
+    <div class="stat-value">{{ highest_category or "N/A" }}</div>
+    <div class="stat-sub">₹{{ "%.2f"|format(highest_amount) }}</div>
+  </div>
+</div>
+
+<div class="chart-grid">
+  <div class="card">
+    <div class="card-header"><h2>Category Distribution</h2></div>
+    <canvas id="categoryDoughnutChart"></canvas>
+  </div>
+  <div class="card">
+    <div class="card-header"><h2>Spending by Category</h2></div>
+    <canvas id="categoryBarChart"></canvas>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header"><h2>Monthly Spending Trend</h2></div>
+  <canvas id="monthlyLineChart"></canvas>
+</div>
+{% else %}
+<div class="card">
+  <div class="empty-state">
+    <p>No spending data available yet.</p>
+  </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+{% if has_data %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script>
+  if (typeof Chart === "undefined") {
+    document.querySelectorAll(".chart-grid canvas, #monthlyLineChart").forEach(function (canvas) {
+      const msg = document.createElement("p");
+      msg.textContent = "Charts couldn't load — check your internet connection.";
+      msg.style.color = "#991B1B";
+      msg.style.fontSize = "13px";
+      canvas.replaceWith(msg);
+    });
+  } else {
+  const categoryLabels = {{ category_totals.keys()|list|tojson }};
+  const categoryValues = {{ category_totals.values()|list|tojson }};
+  const monthlyLabels = {{ monthly_labels|tojson }};
+  const monthlyValues = {{ monthly_values|tojson }};
+
+  const palette = ["#2563EB", "#7DA8FF", "#C7DDFF", "#0F172A", "#94A3B8", "#38BDF8", "#A78BFA", "#F472B6"];
+
+  new Chart(document.getElementById("categoryDoughnutChart"), {
+    type: "doughnut",
+    data: {
+      labels: categoryLabels,
+      datasets: [{ data: categoryValues, backgroundColor: palette }]
+    },
+    options: { plugins: { legend: { position: "bottom" } } }
+  });
+
+  new Chart(document.getElementById("categoryBarChart"), {
+    type: "bar",
+    data: {
+      labels: categoryLabels,
+      datasets: [{ label: "Amount (₹)", data: categoryValues, backgroundColor: "#2563EB" }]
+    },
+    options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+  });
+
+  new Chart(document.getElementById("monthlyLineChart"), {
+    type: "line",
+    data: {
+      labels: monthlyLabels,
+      datasets: [{
+        label: "Monthly Spending (₹)",
+        data: monthlyValues,
+        borderColor: "#2563EB",
+        backgroundColor: "rgba(37, 99, 235, 0.1)",
+        tension: 0.3,
+        fill: true
+      }]
+    },
+    options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+  });
+  }
+</script>
+{% endif %}
+{% endblock %}

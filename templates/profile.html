@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block title %}Profile - ExpenseAI{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h1>Profile</h1>
+  <p>Manage your account, budget, and security settings</p>
+</div>
+
+<div class="card profile-header-card">
+  <div class="avatar">{{ user.name[0]|upper }}</div>
+  <div>
+    <div class="profile-name">{{ user.name }}</div>
+    <div class="profile-email">{{ user.email }}</div>
+  </div>
+</div>
+
+<div class="info-grid">
+  <div class="info-card">
+    <div class="info-title">Account</div>
+    <div class="info-value">Personal</div>
+    <div class="info-status active">Active</div>
+  </div>
+  <div class="info-card">
+    <div class="info-title">AI Categorization</div>
+    <div class="info-value">Machine Learning</div>
+    <div class="info-status active">Active</div>
+  </div>
+  <div class="info-card">
+    <div class="info-title">Currency</div>
+    <div class="info-value">INR (₹)</div>
+    <div class="info-status">Default</div>
+  </div>
+  <div class="info-card">
+    <div class="info-title">Expense Tracking</div>
+    <div class="info-value">Enabled</div>
+    <div class="info-status active">Active</div>
+  </div>
+</div>
+
+<div class="card card-form">
+  <div class="card-header"><h2>Personal Information</h2></div>
+  <form method="POST" action="{{ url_for('profile') }}">
+    <input type="hidden" name="form_type" value="personal">
+    <label for="name">Full Name</label>
+    <input type="text" id="name" name="name" value="{{ user.name }}" required>
+
+    <label for="email">Email Address</label>
+    <input type="email" id="email" name="email" value="{{ user.email }}" required>
+
+    <button type="submit" class="btn-primary">Save Changes</button>
+  </form>
+</div>
+
+<div class="card card-form">
+  <div class="card-header"><h2>Budget Settings</h2></div>
+  <form method="POST" action="{{ url_for('profile') }}">
+    <input type="hidden" name="form_type" value="budget">
+    <label for="monthly_budget">Monthly Budget (₹)</label>
+    <input type="number" id="monthly_budget" name="monthly_budget" step="0.01" min="0" value="{{ user.monthly_budget }}" required>
+
+    <label for="budget_threshold">Alert Threshold (%)</label>
+    <input type="number" id="budget_threshold" name="budget_threshold" min="0" max="100" value="{{ user.budget_threshold }}" required>
+
+    <button type="submit" class="btn-primary">Save Budget</button>
+  </form>
+</div>
+
+<div class="card card-form">
+  <div class="card-header"><h2>Security</h2></div>
+  <form method="POST" action="{{ url_for('change_password') }}">
+    <label for="current_password">Current Password</label>
+    <input type="password" id="current_password" name="current_password" required>
+
+    <label for="new_password">New Password</label>
+    <input type="password" id="new_password" name="new_password" required>
+
+    <label for="confirm_password">Confirm New Password</label>
+    <input type="password" id="confirm_password" name="confirm_password" required>
+
+    <button type="submit" class="btn-primary">Update Password</button>
+  </form>
+</div>
+
+<div class="card">
+  <div class="card-header"><h2>AI Features</h2></div>
+  <ul class="feature-list">
+    <li>AI Expense Categorization</li>
+    <li>Budget Monitoring</li>
+    <li>Spending Analytics</li>
+    <li>Expense Alerts</li>
+  </ul>
+</div>
+{% endblock %}
