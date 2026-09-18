@@ -1190,6 +1190,13 @@ def change_password():
 # App entry point
 # ---------------------------------------------------------------------------
 def create_tables():
+    # Ensure the database folder exists before SQLite tries to create the
+    # .db file inside it - Git doesn't track empty directories, so if this
+    # folder didn't survive the push to GitHub, SQLite would otherwise fail
+    # with "unable to open database file" on a fresh deploy.
+    db_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "database")
+    os.makedirs(db_dir, exist_ok=True)
+
     with app.app_context():
         db.create_all()
 
