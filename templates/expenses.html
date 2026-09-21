@@ -12,7 +12,12 @@
     <h1>Transactions</h1>
     <p>All your recorded expenses</p>
   </div>
-  <a href="{{ url_for('add_expense') }}" class="btn-primary">+ Add Expense</a>
+  <div class="page-header-actions">
+    {% if expenses %}
+      <a href="{{ url_for('export_expenses') }}" class="btn-secondary">⬇ Export CSV</a>
+    {% endif %}
+    <a href="{{ url_for('add_expense') }}" class="btn-primary">+ Add Expense</a>
+  </div>
 </div>
 
 <div class="card">
