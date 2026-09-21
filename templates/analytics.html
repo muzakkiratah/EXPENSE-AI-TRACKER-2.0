@@ -8,15 +8,25 @@
 </div>
 
 {% if has_data %}
-<div class="stat-grid stat-grid-2">
-  <div class="stat-card">
+<div class="stat-grid stat-grid-3">
+  <div class="stat-card accent-blue">
     <div class="stat-label">Total Expenses</div>
     <div class="stat-value">₹{{ "%.2f"|format(total_spent) }}</div>
   </div>
-  <div class="stat-card">
+  <div class="stat-card accent-navy">
     <div class="stat-label">Highest Spending Category</div>
     <div class="stat-value">{{ highest_category or "N/A" }}</div>
     <div class="stat-sub">₹{{ "%.2f"|format(highest_amount) }}</div>
+  </div>
+  <div class="stat-card {% if anomaly_count > 0 %}accent-danger{% else %}accent-medium{% endif %}">
+    <div class="stat-label">Unusual Spending</div>
+    {% if anomaly_count > 0 %}
+      <div class="stat-value negative">🚨 ₹{{ "%.2f"|format(anomaly_total) }}</div>
+      <div class="stat-sub">{{ anomaly_count }} flagged transaction{{ 's' if anomaly_count != 1 else '' }} · {{ anomaly_percent_of_spending }}% of total spending</div>
+    {% else %}
+      <div class="stat-value">₹0.00</div>
+      <div class="stat-sub">No unusual spending detected</div>
+    {% endif %}
   </div>
 </div>
 
@@ -35,6 +45,30 @@
   <div class="card-header"><h2>Monthly Spending Trend</h2></div>
   <canvas id="monthlyLineChart"></canvas>
 </div>
+
+{% if recent_anomalies %}
+<div class="card">
+  <div class="card-header">
+    <h2>🚨 Recently Flagged as Unusual</h2>
+    <a href="{{ url_for('expenses') }}" class="btn-secondary">View All Transactions</a>
+  </div>
+  <div class="transaction-list">
+    {% for exp in recent_anomalies %}
+      <div class="transaction-row anomaly-row">
+        <div class="transaction-icon">🚨</div>
+        <div class="transaction-desc">
+          {{ exp.description }}
+          <div class="anomaly-reason-text">{{ exp.anomaly_reason }}</div>
+        </div>
+        <div class="badge badge-{{ exp.category|lower|replace(' ', '-') }}">{{ exp.category }}</div>
+        <div class="transaction-amount">₹{{ "%.2f"|format(exp.amount) }}</div>
+        <div class="transaction-date">{{ exp.date.strftime("%d %b %Y") }}</div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
+
 {% else %}
 <div class="card">
   <div class="empty-state">
