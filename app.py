@@ -15,7 +15,7 @@ from functools import wraps
 
 from flask import (
     Flask, render_template, request, redirect,
-    url_for, session, flash, jsonify
+    url_for, session, flash, jsonify, Response
 )
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -624,20 +624,25 @@ def build_smart_insights(user, summary, forecast=None):
         })
 
     today = date.today()
-    anomaly_count = (
+    anomalous_this_month = (
         Expense.query.filter(
             Expense.user_id == user.id,
             Expense.is_anomaly.is_(True),
             extract("year", Expense.date) == today.year,
             extract("month", Expense.date) == today.month,
-        ).count()
+        ).all()
     )
+    anomaly_count = len(anomalous_this_month)
     if anomaly_count > 0:
+        anomaly_total = sum(e.amount for e in anomalous_this_month)
         plural = "expenses" if anomaly_count > 1 else "expense"
         insights.append({
             "type": "ml_anomaly",
             "icon": "anomaly",
-            "text": f"🚨 {anomaly_count} unusual {plural} detected this month.",
+            "text": (
+                f"🚨 {anomaly_count} unusual {plural} detected this month, "
+                f"totaling ₹{anomaly_total:,.2f}."
+            ),
         })
 
     if forecast and forecast.get("available"):
@@ -829,6 +834,43 @@ def expenses():
     return render_template("expenses.html", expenses=all_expenses)
 
 
+@app.route("/expenses/export")
+@login_required
+def export_expenses():
+    """
+    Downloads all of the logged-in user's expenses as a CSV file.
+    Pairs with the import feature - data can go in and come back out.
+    """
+    user = current_user()
+    all_expenses = (
+        Expense.query.filter_by(user_id=user.id)
+        .order_by(Expense.date.desc(), Expense.created_at.desc())
+        .all()
+    )
+
+    output = _io.StringIO()
+    writer = _csv.writer(output)
+    writer.writerow(["Date", "Description", "Category", "Amount", "Unusual", "Reason"])
+    for exp in all_expenses:
+        writer.writerow([
+            exp.date.isoformat(),
+            exp.description,
+            exp.category,
+            f"{exp.amount:.2f}",
+            "Yes" if exp.is_anomaly else "No",
+            exp.anomaly_reason or "",
+        ])
+
+    csv_data = output.getvalue()
+    filename = f"expenseai_export_{date.today().isoformat()}.csv"
+
+    return Response(
+        csv_data,
+        mimetype="text/csv",
+        headers={"Content-Disposition": f"attachment; filename={filename}"},
+    )
+
+
 @app.route("/expenses/edit/<int:expense_id>", methods=["GET", "POST"])
 @login_required
 def edit_expense(expense_id):
@@ -974,6 +1016,19 @@ def analytics():
     # Monthly trend for the last 6 months
     monthly_totals = get_monthly_trend(user, months=6)
 
+    # Unusual spending summary - how much of the user's total spending was
+    # flagged, not just how many transactions.
+    anomalous_expenses = [e for e in all_expenses if e.is_anomaly]
+    anomaly_count = len(anomalous_expenses)
+    anomaly_total = round(sum(e.amount for e in anomalous_expenses), 2)
+    anomaly_percent_of_spending = (
+        round((anomaly_total / total_spent) * 100, 1) if total_spent > 0 else 0.0
+    )
+    # Most recent flagged expenses, for context on WHY they were flagged.
+    recent_anomalies = sorted(
+        anomalous_expenses, key=lambda e: (e.date, e.created_at), reverse=True
+    )[:5]
+
     return render_template(
         "analytics.html",
         category_totals=category_totals,
@@ -983,6 +1038,10 @@ def analytics():
         monthly_labels=[m["label"] for m in monthly_totals],
         monthly_values=[m["total"] for m in monthly_totals],
         has_data=len(all_expenses) > 0,
+        anomaly_count=anomaly_count,
+        anomaly_total=anomaly_total,
+        anomaly_percent_of_spending=anomaly_percent_of_spending,
+        recent_anomalies=recent_anomalies,
     )
 
 
